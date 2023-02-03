@@ -56,7 +56,7 @@
 				if (!self.socket) return;
 				
 				var offset = Mstsc.elementOffset(self.canvas);
-				self.socket.emit('mouse', e.clientX - offset.left, e.clientY - offset.top, 0, false);
+				self.socket.emit('m', e.clientX - offset.left, e.clientY - offset.top, 0, false);
 				e.preventDefault || !self.activeSession();
 				return false;
 			});
@@ -64,7 +64,7 @@
 				if (!self.socket) return;
 				
 				var offset = Mstsc.elementOffset(self.canvas);
-				self.socket.emit('mouse', e.clientX - offset.left, e.clientY - offset.top, mouseButtonMap(e.button), true);
+				self.socket.emit('m', e.clientX - offset.left, e.clientY - offset.top, mouseButtonMap(e.button), true);
 				e.preventDefault();
 				return false;
 			});
@@ -72,7 +72,7 @@
 				if (!self.socket || !self.activeSession) return;
 				
 				var offset = Mstsc.elementOffset(self.canvas);
-				self.socket.emit('mouse', e.clientX - offset.left, e.clientY - offset.top, mouseButtonMap(e.button), false);
+				self.socket.emit('m', e.clientX - offset.left, e.clientY - offset.top, mouseButtonMap(e.button), false);
 				e.preventDefault();
 				return false;
 			});
@@ -80,7 +80,7 @@
 				if (!self.socket || !self.activeSession) return;
 				
 				var offset = Mstsc.elementOffset(self.canvas);
-				self.socket.emit('mouse', e.clientX - offset.left, e.clientY - offset.top, mouseButtonMap(e.button), false);
+				self.socket.emit('m', e.clientX - offset.left, e.clientY - offset.top, mouseButtonMap(e.button), false);
 				e.preventDefault();
 				return false;
 			});
@@ -148,16 +148,16 @@
 			var self = this;
 			this.socket = io(window.location.protocol + "//" + window.location.host, { "path": path }).on('rdp-connect', function() {
 				// this event can be occured twice (RDP protocol stack artefact)
-				console.log('[mstsc.js] connected');
+				// console.log('[mstsc.js] connected');
 				self.activeSession = true;
-			}).on('rdp-bitmap', function(bitmap) {
-				console.log('[mstsc.js] bitmap update bpp : ' + bitmap.bitsPerPixel);
+			}).on('r-b', function(bitmap) {
+				// console.log('[mstsc.js] bitmap update bpp : ' + bitmap.bitsPerPixel);
 				self.render.update(bitmap);
-			}).on('rdp-close', function() {
+			}).on('r-cl', function() {
 				next(null);
-				console.log('[mstsc.js] close');
+				// console.log('[mstsc.js] close');
 				self.activeSession = false;
-			}).on('rdp-error', function (err) {
+			}).on('r-er', function (err) {
 				next(err);
 				console.log('[mstsc.js] error : ' + err.code + '(' + err.message + ')');
 				self.activeSession = false;

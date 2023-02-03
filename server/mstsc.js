@@ -43,15 +43,15 @@ module.exports = function (server) {
 				locale : infos.locale,
 				logLevel : process.argv[2] || 'INFO'
 			}).on('connect', function () {
-				client.emit('rdp-connect');
+				client.emit('r-cn');
 			}).on('bitmap', function(bitmap) {
-				client.emit('rdp-bitmap', bitmap);
+				client.emit('r-b', bitmap);
 			}).on('close', function() {
-				client.emit('rdp-close');
+				client.emit('r-cl');
 			}).on('error', function(err) {
-				client.emit('rdp-error', err);
+				client.emit('r-er', err);
 			}).connect(infos.ip, infos.port);
-		}).on('mouse', function (x, y, button, isPressed) {
+		}).on('m', function (x, y, button, isPressed) {
 			if (!rdpClient)  return;
 
 			rdpClient.sendPointerEvent(x, y, button, isPressed);
